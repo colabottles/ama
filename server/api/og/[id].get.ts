@@ -1,7 +1,5 @@
 import satori from 'satori'
 import { Resvg } from '@resvg/resvg-js'
-import { readFile } from 'fs/promises'
-import { resolve } from 'path'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
@@ -17,8 +15,8 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, message: 'Question not found.' })
   }
 
-  // read bundled font from public/fonts/
-  const fontData = await readFile(resolve('./public/fonts/inter.ttf'))
+  // read font from server/assets - Nitro bundles this into the function
+  const fontData = await useStorage('assets/server').getItemRaw('fonts/inter.ttf')
 
   const svg = await satori(
     {
