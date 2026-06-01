@@ -195,10 +195,7 @@ useHead({ title: 'Admin — AMA' })
           <!-- card preview -->
           <div class="card-preview" aria-label="Shareable card preview">
             <p class="preview-label">Card preview</p>
-            <QuestionCard
-              :question="selected"
-              :handle="handle"
-              :display-name="displayName" />
+            <QuestionCard :question="selected" />
             <div class="share-actions">
               <button
                 class="btn btn--copy"

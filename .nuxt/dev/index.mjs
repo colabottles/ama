@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1db57-IphoOeniH3d2GmxJBuPKfGEi2Jo\"",
-    "mtime": "2026-06-01T04:53:10.708Z",
-    "size": 121687,
+    "etag": "\"1dbab-HdBGhUEKZqoYRJz+NIq9InRxk+c\"",
+    "mtime": "2026-06-01T05:03:12.074Z",
+    "size": 121771,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"75866-62sp/iQJndGIJQpcGPut+nuCK0g\"",
-    "mtime": "2026-06-01T04:53:10.709Z",
-    "size": 481382,
+    "etag": "\"758ff-l1X8+FiuYM1lcINa/sKOPLrIk/8\"",
+    "mtime": "2026-06-01T05:03:12.075Z",
+    "size": 481535,
     "path": "index.mjs.map"
   }
 };
@@ -3198,50 +3198,7 @@ const _id__get$2 = defineEventHandler(async (event) => {
           boxSizing: "border-box"
         },
         children: [
-          // header
-          {
-            type: "div",
-            props: {
-              style: {
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                marginBottom: "24px"
-              },
-              children: [
-                {
-                  type: "div",
-                  props: {
-                    style: { display: "flex", flexDirection: "column", gap: "4px" },
-                    children: [
-                      {
-                        type: "span",
-                        props: {
-                          style: { fontWeight: 700, fontSize: "20px", color: "#fafafa" },
-                          children: "Todd Libby"
-                        }
-                      },
-                      {
-                        type: "span",
-                        props: {
-                          style: { fontSize: "16px", color: "#a07070" },
-                          children: "@toddl.dev"
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  type: "span",
-                  props: {
-                    style: { fontSize: "16px", fontWeight: 600, color: "#F46945" },
-                    children: "#ama"
-                  }
-                }
-              ]
-            }
-          },
-          // terminal
+          // terminal only — no header or footer
           {
             type: "div",
             props: {
@@ -3284,7 +3241,7 @@ const _id__get$2 = defineEventHandler(async (event) => {
                         type: "span",
                         props: {
                           style: {
-                            fontSize: "18px",
+                            fontSize: "22px",
                             color: "#fafafa",
                             lineHeight: 1.5,
                             whiteSpace: "pre-wrap",
@@ -3293,21 +3250,6 @@ const _id__get$2 = defineEventHandler(async (event) => {
                           children: question.question
                         }
                       }
-                    ]
-                  }
-                },
-                // footer
-                {
-                  type: "div",
-                  props: {
-                    style: {
-                      display: "flex",
-                      justifyContent: "space-between",
-                      fontSize: "13px",
-                      color: "rgba(255,255,255,0.4)"
-                    },
-                    children: [
-                      { type: "span", props: { children: "toddl.dev/ama" } }
                     ]
                   }
                 }

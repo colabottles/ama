@@ -39,50 +39,7 @@ export default defineEventHandler(async (event) => {
           boxSizing: 'border-box',
         },
         children: [
-          // header
-          {
-            type: 'div',
-            props: {
-              style: {
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                marginBottom: '24px',
-              },
-              children: [
-                {
-                  type: 'div',
-                  props: {
-                    style: { display: 'flex', flexDirection: 'column', gap: '4px' },
-                    children: [
-                      {
-                        type: 'span',
-                        props: {
-                          style: { fontWeight: 700, fontSize: '20px', color: '#fafafa' },
-                          children: 'Todd Libby',
-                        },
-                      },
-                      {
-                        type: 'span',
-                        props: {
-                          style: { fontSize: '16px', color: '#a07070' },
-                          children: '@toddl.dev',
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  type: 'span',
-                  props: {
-                    style: { fontSize: '16px', fontWeight: 600, color: '#F46945' },
-                    children: '#ama',
-                  },
-                },
-              ],
-            },
-          },
-          // terminal
+          // terminal only — no header or footer
           {
             type: 'div',
             props: {
@@ -125,7 +82,7 @@ export default defineEventHandler(async (event) => {
                         type: 'span',
                         props: {
                           style: {
-                            fontSize: '18px',
+                            fontSize: '22px',
                             color: '#fafafa',
                             lineHeight: 1.5,
                             whiteSpace: 'pre-wrap',
@@ -134,21 +91,6 @@ export default defineEventHandler(async (event) => {
                           children: question.question,
                         },
                       },
-                    ],
-                  },
-                },
-                // footer
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      fontSize: '13px',
-                      color: 'rgba(255,255,255,0.4)',
-                    },
-                    children: [
-                      { type: 'span', props: { children: 'toddl.dev/ama' } },
                     ],
                   },
                 },
