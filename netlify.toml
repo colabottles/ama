@@ -4,14 +4,15 @@
 
 [build.environment]
   NODE_VERSION = "22"
-  NODE_OPTIONS = "--max-old-space-size=4096"
-
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/server"
-  status = 200
 
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/server"
   status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+  force = true
