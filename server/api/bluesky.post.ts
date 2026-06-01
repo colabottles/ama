@@ -43,37 +43,8 @@ export default defineEventHandler(async (event) => {
       return match?.[1] ?? ''
     }
 
-    const ogImage = getOg('og:image')
     const ogTitle = getOg('og:title')
     const ogDescription = getOg('og:description')
-
-    console.log('[bluesky] ogImage:', ogImage)
-    console.log('[bluesky] ogTitle:', ogTitle)
-    console.log('[bluesky] ogDescription:', ogDescription)
-
-    // upload OG image as blob for the link card thumbnail
-    let thumbBlob = null
-    if (ogImage) {
-      const imgRes = await fetch(ogImage).catch((e) => { console.log('[bluesky] imgFetch error:', e); return null })
-      console.log('[bluesky] imgRes status:', imgRes?.status)
-      if (imgRes?.ok) {
-        const imgBuffer = await imgRes.arrayBuffer()
-        console.log('[bluesky] imgBuffer size:', imgBuffer.byteLength)
-        const uploadRes = await fetch('https://bsky.social/xrpc/com.atproto.repo.uploadBlob', {
-          method: 'POST',
-          headers: {
-            'Content-Type': imgRes.headers.get('content-type') ?? 'image/png',
-            'Authorization': `Bearer ${accessJwt}`,
-          },
-          body: imgBuffer,
-        })
-        console.log('[bluesky] uploadRes status:', uploadRes.status)
-        if (uploadRes.ok) {
-          thumbBlob = (await uploadRes.json()).blob
-          console.log('[bluesky] thumbBlob:', JSON.stringify(thumbBlob))
-        }
-      }
-    }
 
     embed = {
       $type: 'app.bsky.embed.external',
@@ -81,7 +52,6 @@ export default defineEventHandler(async (event) => {
         uri: questionUrl,
         title: ogTitle || 'AMA',
         description: ogDescription || '',
-        ...(thumbBlob ? { thumb: thumbBlob } : {}),
       },
     }
   }

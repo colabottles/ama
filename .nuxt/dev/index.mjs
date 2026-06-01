@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1de48-/m50OJFmAAoMgRZgPbpS+SQDI4E\"",
-    "mtime": "2026-06-01T04:42:53.708Z",
-    "size": 122440,
+    "etag": "\"1e064-/fjoXrsAYwU/2onNbLLNCSOI9nk\"",
+    "mtime": "2026-06-01T04:47:41.284Z",
+    "size": 122980,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"76203-4TyxtZnBTsEgw5QBxgOiHhy50Xc\"",
-    "mtime": "2026-06-01T04:42:53.708Z",
-    "size": 483843,
+    "etag": "\"7698b-teBADDt25Om9hKK7yWZleD+8vnM\"",
+    "mtime": "2026-06-01T04:47:41.284Z",
+    "size": 485771,
     "path": "index.mjs.map"
   }
 };
@@ -3071,7 +3071,7 @@ const styles$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const bluesky_post = defineEventHandler(async (event) => {
-  var _a, _b;
+  var _a;
   const config = useRuntimeConfig();
   const body = await readBody(event);
   if (!(body == null ? void 0 : body.text)) {
@@ -3100,48 +3100,18 @@ const bluesky_post = defineEventHandler(async (event) => {
     const ogRes = await fetch(questionUrl).catch(() => null);
     const ogHtml = ogRes ? await ogRes.text() : "";
     const getOg = (prop) => {
-      var _a2, _b2;
+      var _a2, _b;
       const match = (_a2 = ogHtml.match(new RegExp(`<meta[^>]*property=["']${prop}["'][^>]*content=["']([^"']+)["']`, "i"))) != null ? _a2 : ogHtml.match(new RegExp(`<meta[^>]*content=["']([^"']+)["'][^>]*property=["']${prop}["']`, "i"));
-      return (_b2 = match == null ? void 0 : match[1]) != null ? _b2 : "";
+      return (_b = match == null ? void 0 : match[1]) != null ? _b : "";
     };
-    const ogImage = getOg("og:image");
     const ogTitle = getOg("og:title");
     const ogDescription = getOg("og:description");
-    console.log("[bluesky] ogImage:", ogImage);
-    console.log("[bluesky] ogTitle:", ogTitle);
-    console.log("[bluesky] ogDescription:", ogDescription);
-    let thumbBlob = null;
-    if (ogImage) {
-      const imgRes = await fetch(ogImage).catch((e) => {
-        console.log("[bluesky] imgFetch error:", e);
-        return null;
-      });
-      console.log("[bluesky] imgRes status:", imgRes == null ? void 0 : imgRes.status);
-      if (imgRes == null ? void 0 : imgRes.ok) {
-        const imgBuffer = await imgRes.arrayBuffer();
-        console.log("[bluesky] imgBuffer size:", imgBuffer.byteLength);
-        const uploadRes = await fetch("https://bsky.social/xrpc/com.atproto.repo.uploadBlob", {
-          method: "POST",
-          headers: {
-            "Content-Type": (_a = imgRes.headers.get("content-type")) != null ? _a : "image/png",
-            "Authorization": `Bearer ${accessJwt}`
-          },
-          body: imgBuffer
-        });
-        console.log("[bluesky] uploadRes status:", uploadRes.status);
-        if (uploadRes.ok) {
-          thumbBlob = (await uploadRes.json()).blob;
-          console.log("[bluesky] thumbBlob:", JSON.stringify(thumbBlob));
-        }
-      }
-    }
     embed = {
       $type: "app.bsky.embed.external",
       external: {
         uri: questionUrl,
         title: ogTitle || "AMA",
-        description: ogDescription || "",
-        ...thumbBlob ? { thumb: thumbBlob } : {}
+        description: ogDescription || ""
       }
     };
   }
@@ -3177,7 +3147,7 @@ const bluesky_post = defineEventHandler(async (event) => {
   });
   if (!postRes.ok) {
     const err = await postRes.json();
-    throw createError({ statusCode: 500, message: (_b = err.message) != null ? _b : "Failed to create Bluesky post." });
+    throw createError({ statusCode: 500, message: (_a = err.message) != null ? _a : "Failed to create Bluesky post." });
   }
   const post = await postRes.json();
   return { uri: post.uri, cid: post.cid };
