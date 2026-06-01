@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1dbab-HdBGhUEKZqoYRJz+NIq9InRxk+c\"",
-    "mtime": "2026-06-01T05:03:12.074Z",
-    "size": 121771,
+    "etag": "\"1d5f6-ldRVDH8D7aGrCZJ2+Wi6f75oI6E\"",
+    "mtime": "2026-06-01T05:15:02.557Z",
+    "size": 120310,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"758ff-l1X8+FiuYM1lcINa/sKOPLrIk/8\"",
-    "mtime": "2026-06-01T05:03:12.075Z",
-    "size": 481535,
+    "etag": "\"73f69-ZchPXF/ByPiRwG/PURG2trPMuWM\"",
+    "mtime": "2026-06-01T05:15:02.557Z",
+    "size": 474985,
     "path": "index.mjs.map"
   }
 };
@@ -3114,7 +3114,7 @@ const bluesky_post = defineEventHandler(async (event) => {
         embed = {
           $type: "app.bsky.embed.images",
           images: [{
-            alt: "AMA question card",
+            alt: body.altText || "AMA question card",
             image: blob,
             aspectRatio: { $type: "app.bsky.embed.defs#aspectRatio", width: 800, height: 418 }
           }]
@@ -3127,6 +3127,10 @@ const bluesky_post = defineEventHandler(async (event) => {
   const hashtagIndex = text.lastIndexOf("#ama");
   const hashtagByteStart = encoder.encode(text.slice(0, hashtagIndex)).length;
   const hashtagByteEnd = hashtagByteStart + encoder.encode("#ama").length;
+  const urlStr = "asktodd.netlify.app/ama";
+  const urlIndex = text.lastIndexOf(urlStr);
+  const urlByteStart = encoder.encode(text.slice(0, urlIndex)).length;
+  const urlByteEnd = urlByteStart + encoder.encode(urlStr).length;
   const record = {
     $type: "app.bsky.feed.post",
     text,
@@ -3135,6 +3139,10 @@ const bluesky_post = defineEventHandler(async (event) => {
       {
         index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
         features: [{ $type: "app.bsky.richtext.facet#tag", tag: "ama" }]
+      },
+      {
+        index: { byteStart: urlByteStart, byteEnd: urlByteEnd },
+        features: [{ $type: "app.bsky.richtext.facet#link", uri: "https://asktodd.netlify.app/ama" }]
       }
     ],
     ...embed ? { embed } : {}

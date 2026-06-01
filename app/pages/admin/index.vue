@@ -82,6 +82,7 @@ async function shareToBluesky(q: Question) {
       body: {
         text: blueskyPostText(q),
         questionUrl: `https://asktodd.netlify.app/ama/${q.id}`,
+        altText: q.question,
       },
     })
     postError.value = ''

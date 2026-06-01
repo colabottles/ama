@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
         embed = {
           $type: 'app.bsky.embed.images',
           images: [{
-            alt: 'AMA question card',
+            alt: body.altText || 'AMA question card',
             image: blob,
             aspectRatio: { $type: 'app.bsky.embed.defs#aspectRatio', width: 800, height: 418 },
           }],
@@ -61,12 +61,18 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // 3. build #ama hashtag facet
+  // 3. build facets for #ama hashtag and URL
   const text = body.text as string
   const encoder = new TextEncoder()
+
   const hashtagIndex = text.lastIndexOf('#ama')
   const hashtagByteStart = encoder.encode(text.slice(0, hashtagIndex)).length
   const hashtagByteEnd = hashtagByteStart + encoder.encode('#ama').length
+
+  const urlStr = 'asktodd.netlify.app/ama'
+  const urlIndex = text.lastIndexOf(urlStr)
+  const urlByteStart = encoder.encode(text.slice(0, urlIndex)).length
+  const urlByteEnd = urlByteStart + encoder.encode(urlStr).length
 
   const record: Record<string, unknown> = {
     $type: 'app.bsky.feed.post',
@@ -76,6 +82,10 @@ export default defineEventHandler(async (event) => {
       {
         index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
         features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'ama' }],
+      },
+      {
+        index: { byteStart: urlByteStart, byteEnd: urlByteEnd },
+        features: [{ $type: 'app.bsky.richtext.facet#link', uri: 'https://asktodd.netlify.app/ama' }],
       },
     ],
     ...(embed ? { embed } : {}),
