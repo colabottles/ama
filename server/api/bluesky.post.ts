@@ -47,12 +47,18 @@ export default defineEventHandler(async (event) => {
     const ogTitle = getOg('og:title')
     const ogDescription = getOg('og:description')
 
+    console.log('[bluesky] ogImage:', ogImage)
+    console.log('[bluesky] ogTitle:', ogTitle)
+    console.log('[bluesky] ogDescription:', ogDescription)
+
     // upload OG image as blob for the link card thumbnail
     let thumbBlob = null
     if (ogImage) {
-      const imgRes = await fetch(ogImage).catch(() => null)
+      const imgRes = await fetch(ogImage).catch((e) => { console.log('[bluesky] imgFetch error:', e); return null })
+      console.log('[bluesky] imgRes status:', imgRes?.status)
       if (imgRes?.ok) {
         const imgBuffer = await imgRes.arrayBuffer()
+        console.log('[bluesky] imgBuffer size:', imgBuffer.byteLength)
         const uploadRes = await fetch('https://bsky.social/xrpc/com.atproto.repo.uploadBlob', {
           method: 'POST',
           headers: {
@@ -61,8 +67,10 @@ export default defineEventHandler(async (event) => {
           },
           body: imgBuffer,
         })
+        console.log('[bluesky] uploadRes status:', uploadRes.status)
         if (uploadRes.ok) {
           thumbBlob = (await uploadRes.json()).blob
+          console.log('[bluesky] thumbBlob:', JSON.stringify(thumbBlob))
         }
       }
     }

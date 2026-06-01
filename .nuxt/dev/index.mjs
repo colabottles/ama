@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1dffe-vY+a0/qtVf4NeOjzti4GQ6hNliM\"",
-    "mtime": "2026-06-01T04:33:11.447Z",
-    "size": 122878,
+    "etag": "\"1de48-/m50OJFmAAoMgRZgPbpS+SQDI4E\"",
+    "mtime": "2026-06-01T04:42:53.708Z",
+    "size": 122440,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"7689d-MDwZCdIC/yqW4xeVdNm4QQ1coWI\"",
-    "mtime": "2026-06-01T04:33:11.447Z",
-    "size": 485533,
+    "etag": "\"76203-4TyxtZnBTsEgw5QBxgOiHhy50Xc\"",
+    "mtime": "2026-06-01T04:42:53.708Z",
+    "size": 483843,
     "path": "index.mjs.map"
   }
 };
@@ -3107,11 +3107,19 @@ const bluesky_post = defineEventHandler(async (event) => {
     const ogImage = getOg("og:image");
     const ogTitle = getOg("og:title");
     const ogDescription = getOg("og:description");
+    console.log("[bluesky] ogImage:", ogImage);
+    console.log("[bluesky] ogTitle:", ogTitle);
+    console.log("[bluesky] ogDescription:", ogDescription);
     let thumbBlob = null;
     if (ogImage) {
-      const imgRes = await fetch(ogImage).catch(() => null);
+      const imgRes = await fetch(ogImage).catch((e) => {
+        console.log("[bluesky] imgFetch error:", e);
+        return null;
+      });
+      console.log("[bluesky] imgRes status:", imgRes == null ? void 0 : imgRes.status);
       if (imgRes == null ? void 0 : imgRes.ok) {
         const imgBuffer = await imgRes.arrayBuffer();
+        console.log("[bluesky] imgBuffer size:", imgBuffer.byteLength);
         const uploadRes = await fetch("https://bsky.social/xrpc/com.atproto.repo.uploadBlob", {
           method: "POST",
           headers: {
@@ -3120,8 +3128,10 @@ const bluesky_post = defineEventHandler(async (event) => {
           },
           body: imgBuffer
         });
+        console.log("[bluesky] uploadRes status:", uploadRes.status);
         if (uploadRes.ok) {
           thumbBlob = (await uploadRes.json()).blob;
+          console.log("[bluesky] thumbBlob:", JSON.stringify(thumbBlob));
         }
       }
     }
