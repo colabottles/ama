@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1d5f6-ldRVDH8D7aGrCZJ2+Wi6f75oI6E\"",
-    "mtime": "2026-06-01T05:15:02.557Z",
-    "size": 120310,
+    "etag": "\"1d9b8-GS01mReRO3RDowPbrDGEE662nPM\"",
+    "mtime": "2026-06-01T05:37:43.907Z",
+    "size": 121272,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"73f69-ZchPXF/ByPiRwG/PURG2trPMuWM\"",
-    "mtime": "2026-06-01T05:15:02.557Z",
-    "size": 474985,
+    "etag": "\"754ff-pQqFmvTTTucnBO9YjwQJNowsrZI\"",
+    "mtime": "2026-06-01T05:37:43.906Z",
+    "size": 480511,
     "path": "index.mjs.map"
   }
 };
@@ -3188,6 +3188,9 @@ const _id__get$2 = defineEventHandler(async (event) => {
   const raw = await storage.getItem("fonts/SofiaSansSemiCondensed-Medium.ttf");
   if (!raw) throw createError({ statusCode: 500, message: "Font not found." });
   const fontData = Buffer.from(raw, "base64");
+  const diff = Date.now() - new Date(question.created_at).getTime();
+  const minutes = Math.floor(diff / 6e4);
+  const timeAgo = minutes < 60 ? `${minutes}m ago` : minutes < 1440 ? `${Math.floor(minutes / 60)}h ago` : `${Math.floor(minutes / 1440)}d ago`;
   const svg = await satori(
     {
       type: "div",
@@ -3203,10 +3206,22 @@ const _id__get$2 = defineEventHandler(async (event) => {
           flexDirection: "column",
           fontFamily: "Sofia",
           color: "#fafafa",
-          boxSizing: "border-box"
+          boxSizing: "border-box",
+          gap: "20px"
         },
         children: [
-          // terminal only — no header or footer
+          // header
+          {
+            type: "div",
+            props: {
+              style: { display: "flex", justifyContent: "space-between", alignItems: "center" },
+              children: [
+                { type: "span", props: { style: { fontWeight: 700, fontSize: "22px", color: "#fafafa" }, children: "Ask Todd" } },
+                { type: "span", props: { style: { fontSize: "16px", fontWeight: 600, color: "#F46945" }, children: "#ama" } }
+              ]
+            }
+          },
+          // terminal
           {
             type: "div",
             props: {
@@ -3232,32 +3247,25 @@ const _id__get$2 = defineEventHandler(async (event) => {
                     ]
                   }
                 },
-                // question body
+                // question body with line number
                 {
                   type: "div",
                   props: {
-                    style: {
-                      background: "#000000",
-                      borderRadius: "4px",
-                      padding: "16px",
-                      flex: 1,
-                      display: "flex",
-                      alignItems: "flex-start"
-                    },
+                    style: { background: "#000000", borderRadius: "4px", padding: "16px", flex: 1, display: "flex", alignItems: "flex-start", gap: "12px" },
                     children: [
-                      {
-                        type: "span",
-                        props: {
-                          style: {
-                            fontSize: "22px",
-                            color: "#fafafa",
-                            lineHeight: 1.5,
-                            whiteSpace: "pre-wrap",
-                            wordBreak: "break-word"
-                          },
-                          children: question.question
-                        }
-                      }
+                      { type: "span", props: { style: { fontSize: "16px", color: "#572620", userSelect: "none", minWidth: "12px" }, children: "1" } },
+                      { type: "span", props: { style: { fontSize: "18px", color: "#fafafa", lineHeight: 1.5, whiteSpace: "pre-wrap", wordBreak: "break-word", flex: 1 }, children: question.question } }
+                    ]
+                  }
+                },
+                // footer
+                {
+                  type: "div",
+                  props: {
+                    style: { display: "flex", justifyContent: "space-between", fontSize: "13px", color: "rgba(255,255,255,0.4)" },
+                    children: [
+                      { type: "span", props: { children: "asktodd.netlify.app" } },
+                      { type: "span", props: { children: `asked ${timeAgo}` } }
                     ]
                   }
                 }
