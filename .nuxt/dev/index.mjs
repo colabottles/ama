@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1d9b8-GS01mReRO3RDowPbrDGEE662nPM\"",
-    "mtime": "2026-06-01T05:37:43.907Z",
-    "size": 121272,
+    "etag": "\"1d9cd-W/r+pz3bFiZX7NqJtd6ui+cfWyo\"",
+    "mtime": "2026-06-01T05:42:17.684Z",
+    "size": 121293,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"754ff-pQqFmvTTTucnBO9YjwQJNowsrZI\"",
-    "mtime": "2026-06-01T05:37:43.906Z",
-    "size": 480511,
+    "etag": "\"74e79-C/hZpMcv3tknlRp8M9bjbIRQYpE\"",
+    "mtime": "2026-06-01T05:42:17.636Z",
+    "size": 478841,
     "path": "index.mjs.map"
   }
 };
@@ -3253,7 +3253,7 @@ const _id__get$2 = defineEventHandler(async (event) => {
                   props: {
                     style: { background: "#000000", borderRadius: "4px", padding: "16px", flex: 1, display: "flex", alignItems: "flex-start", gap: "12px" },
                     children: [
-                      { type: "span", props: { style: { fontSize: "16px", color: "#572620", userSelect: "none", minWidth: "12px" }, children: "1" } },
+                      { type: "span", props: { style: { fontSize: "18px", lineHeight: 1.5, color: "#572620", userSelect: "none", minWidth: "12px" }, children: "1" } },
                       { type: "span", props: { style: { fontSize: "18px", color: "#fafafa", lineHeight: 1.5, whiteSpace: "pre-wrap", wordBreak: "break-word", flex: 1 }, children: question.question } }
                     ]
                   }

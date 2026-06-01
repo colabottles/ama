@@ -91,7 +91,7 @@ export default defineEventHandler(async (event) => {
                   props: {
                     style: { background: '#000000', borderRadius: '4px', padding: '16px', flex: 1, display: 'flex', alignItems: 'flex-start', gap: '12px' },
                     children: [
-                      { type: 'span', props: { style: { fontSize: '16px', color: '#572620', userSelect: 'none', minWidth: '12px' }, children: '1' } },
+                      { type: 'span', props: { style: { fontSize: '18px', lineHeight: 1.5, color: '#572620', userSelect: 'none', minWidth: '12px' }, children: '1' } },
                       { type: 'span', props: { style: { fontSize: '18px', color: '#fafafa', lineHeight: 1.5, whiteSpace: 'pre-wrap', wordBreak: 'break-word', flex: 1 }, children: question.question } },
                     ],
                   },
