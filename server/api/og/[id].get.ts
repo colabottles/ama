@@ -1,5 +1,7 @@
 import satori from 'satori'
 import { Resvg } from '@resvg/resvg-js'
+import { readFile } from 'fs/promises'
+import { resolve } from 'path'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
@@ -15,9 +17,8 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, message: 'Question not found.' })
   }
 
-  // Noto Sans Mono — reliable TTF from Google Fonts static CDN
-  const fontRes = await fetch('https://fonts.gstatic.com/s/notosansmono/v29/BngrUXNETWXI6LwhGYvaxZikqZqK6fobFCFKAa7H.ttf')
-  const fontData = await fontRes.arrayBuffer()
+  // read bundled font from public/fonts/
+  const fontData = await readFile(resolve('./public/fonts/inter.ttf'))
 
   const svg = await satori(
     {

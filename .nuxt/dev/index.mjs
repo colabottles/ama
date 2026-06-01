@@ -9,6 +9,7 @@ import viteNodeEntry_mjs from 'file://C:/Users/Todd/Developer/ama/node_modules/@
 import { viteNodeFetch } from 'file://C:/Users/Todd/Developer/ama/node_modules/@nuxt/vite-builder/dist/vite-node.mjs';
 import satori from 'file://C:/Users/Todd/Developer/ama/node_modules/satori/dist/index.js';
 import { Resvg } from 'file://C:/Users/Todd/Developer/ama/node_modules/@resvg/resvg-js/index.js';
+import { readFile } from 'node:fs/promises';
 import { createClient } from 'file://C:/Users/Todd/Developer/ama/node_modules/@supabase/supabase-js/dist/index.mjs';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://C:/Users/Todd/Developer/ama/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, encodePath, joinRelativeURL } from 'file://C:/Users/Todd/Developer/ama/node_modules/ufo/dist/index.mjs';
@@ -28,7 +29,6 @@ import unstorage_47drivers_47fs from 'file://C:/Users/Todd/Developer/ama/node_mo
 import file_58_47_47_47C_58_47Users_47Todd_47Developer_47ama_47node_modules_47_64nuxt_47nitro_45server_47dist_47runtime_47utils_47cache_45driver_46js from 'file://C:/Users/Todd/Developer/ama/node_modules/@nuxt/nitro-server/dist/runtime/utils/cache-driver.js';
 import { digest, hash as hash$1 } from 'file://C:/Users/Todd/Developer/ama/node_modules/ohash/dist/index.mjs';
 import { toRouteMatcher, createRouter } from 'file://C:/Users/Todd/Developer/ama/node_modules/radix3/dist/index.mjs';
-import { readFile } from 'node:fs/promises';
 import consola, { consola as consola$1 } from 'file://C:/Users/Todd/Developer/ama/node_modules/consola/dist/index.mjs';
 import { ErrorParser } from 'file://C:/Users/Todd/Developer/ama/node_modules/youch-core/build/index.js';
 import { Youch } from 'file://C:/Users/Todd/Developer/ama/node_modules/youch/build/index.js';
@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1dc9e-xBmSFphs8MI/lW4/T1P6l2qA+xg\"",
-    "mtime": "2026-06-01T03:49:34.964Z",
-    "size": 122014,
+    "etag": "\"1ddc0-Q9wvpXPyYMgHoUpv+uyBYtcO0Jk\"",
+    "mtime": "2026-06-01T03:57:04.361Z",
+    "size": 122304,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"75fd9-XUPQ+2RIISTTOMl8YOJ0CVKZg0w\"",
-    "mtime": "2026-06-01T03:49:34.964Z",
-    "size": 483289,
+    "etag": "\"75e2a-Sxe08dzioDAdnsuU2TAG+O+Dtgs\"",
+    "mtime": "2026-06-01T03:57:04.361Z",
+    "size": 482858,
     "path": "index.mjs.map"
   }
 };
@@ -3189,8 +3189,7 @@ const _id__get$2 = defineEventHandler(async (event) => {
   if (error || !question) {
     throw createError({ statusCode: 404, message: "Question not found." });
   }
-  const fontRes = await fetch("https://fonts.gstatic.com/s/notosansmono/v29/BngrUXNETWXI6LwhGYvaxZikqZqK6fobFCFKAa7H.ttf");
-  const fontData = await fontRes.arrayBuffer();
+  const fontData = await readFile(resolve("./public/fonts/inter.ttf"));
   const svg = await satori(
     {
       type: "div",
