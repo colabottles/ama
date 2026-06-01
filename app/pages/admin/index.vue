@@ -66,7 +66,7 @@ async function deleteQuestion(q: Question) {
 
 function blueskyPostText(q: Question): string {
   const text = q.answer ? q.answer.trim() : q.question.trim()
-  return `${text} #ama\n\nhttps://asktodd.netlify.app/ama/${q.id}`
+  return `${text} #ama`
 }
 
 async function shareToBluesky(q: Question) {
@@ -81,6 +81,7 @@ async function shareToBluesky(q: Question) {
       method: 'POST',
       body: {
         text: blueskyPostText(q),
+        questionUrl: `https://asktodd.netlify.app/ama/${q.id}`,
       },
     })
     postError.value = ''

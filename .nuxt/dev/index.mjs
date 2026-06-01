@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1dfbf-pVjgZHFKBvRfP8fH+dFpd+Gau7w\"",
-    "mtime": "2026-06-01T04:29:53.982Z",
-    "size": 122815,
+    "etag": "\"1dffe-vY+a0/qtVf4NeOjzti4GQ6hNliM\"",
+    "mtime": "2026-06-01T04:33:11.447Z",
+    "size": 122878,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"767e4-1mjVV0WxAU+rsT1z4D+lxncSCzk\"",
-    "mtime": "2026-06-01T04:29:53.982Z",
-    "size": 485348,
+    "etag": "\"7689d-MDwZCdIC/yqW4xeVdNm4QQ1coWI\"",
+    "mtime": "2026-06-01T04:33:11.447Z",
+    "size": 485533,
     "path": "index.mjs.map"
   }
 };
@@ -3094,9 +3094,7 @@ const bluesky_post = defineEventHandler(async (event) => {
   const session = await sessionRes.json();
   const accessJwt = session.accessJwt;
   const did = session.did;
-  const text = body.text;
-  const urlMatch = text.match(/https:\/\/\S+/);
-  const questionUrl = urlMatch ? urlMatch[0] : void 0;
+  const questionUrl = body.questionUrl;
   let embed;
   if (questionUrl) {
     const ogRes = await fetch(questionUrl).catch(() => null);
@@ -3137,22 +3135,15 @@ const bluesky_post = defineEventHandler(async (event) => {
       }
     };
   }
+  const text = body.text;
   const encoder = new TextEncoder();
   const hashtagIndex = text.lastIndexOf("#ama");
   const hashtagByteStart = encoder.encode(text.slice(0, hashtagIndex)).length;
   const hashtagByteEnd = hashtagByteStart + encoder.encode("#ama").length;
-  const urlIndex = text.lastIndexOf("https://");
-  const urlStr = text.slice(urlIndex);
-  const urlByteStart = encoder.encode(text.slice(0, urlIndex)).length;
-  const urlByteEnd = urlByteStart + encoder.encode(urlStr).length;
   const facets = [
     {
       index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
       features: [{ $type: "app.bsky.richtext.facet#tag", tag: "ama" }]
-    },
-    {
-      index: { byteStart: urlByteStart, byteEnd: urlByteEnd },
-      features: [{ $type: "app.bsky.richtext.facet#link", uri: urlStr }]
     }
   ];
   const record = {

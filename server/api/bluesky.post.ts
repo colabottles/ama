@@ -28,10 +28,8 @@ export default defineEventHandler(async (event) => {
   const accessJwt = session.accessJwt
   const did = session.did
 
-  // 2. extract question URL from post text and build link card embed
-  const text = body.text as string
-  const urlMatch = text.match(/https:\/\/\S+/)
-  const questionUrl = urlMatch ? urlMatch[0] : undefined
+  // 2. build link card embed from questionUrl
+  const questionUrl = body.questionUrl as string | undefined
   let embed: Record<string, unknown> | undefined
 
   if (questionUrl) {
@@ -80,26 +78,18 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // 3. build facets for #ama hashtag and URL link
+  // 3. build facets for #ama hashtag
+  const text = body.text as string
   const encoder = new TextEncoder()
 
   const hashtagIndex = text.lastIndexOf('#ama')
   const hashtagByteStart = encoder.encode(text.slice(0, hashtagIndex)).length
   const hashtagByteEnd = hashtagByteStart + encoder.encode('#ama').length
 
-  const urlIndex = text.lastIndexOf('https://')
-  const urlStr = text.slice(urlIndex)
-  const urlByteStart = encoder.encode(text.slice(0, urlIndex)).length
-  const urlByteEnd = urlByteStart + encoder.encode(urlStr).length
-
   const facets = [
     {
       index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
       features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'ama' }],
-    },
-    {
-      index: { byteStart: urlByteStart, byteEnd: urlByteEnd },
-      features: [{ $type: 'app.bsky.richtext.facet#link', uri: urlStr }],
     },
   ]
 
