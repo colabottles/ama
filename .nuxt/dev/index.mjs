@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1e064-/fjoXrsAYwU/2onNbLLNCSOI9nk\"",
-    "mtime": "2026-06-01T04:47:41.284Z",
-    "size": 122980,
+    "etag": "\"1db57-IphoOeniH3d2GmxJBuPKfGEi2Jo\"",
+    "mtime": "2026-06-01T04:53:10.708Z",
+    "size": 121687,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"7698b-teBADDt25Om9hKK7yWZleD+8vnM\"",
-    "mtime": "2026-06-01T04:47:41.284Z",
-    "size": 485771,
+    "etag": "\"75866-62sp/iQJndGIJQpcGPut+nuCK0g\"",
+    "mtime": "2026-06-01T04:53:10.709Z",
+    "size": 481382,
     "path": "index.mjs.map"
   }
 };
@@ -3097,40 +3097,46 @@ const bluesky_post = defineEventHandler(async (event) => {
   const questionUrl = body.questionUrl;
   let embed;
   if (questionUrl) {
-    const ogRes = await fetch(questionUrl).catch(() => null);
-    const ogHtml = ogRes ? await ogRes.text() : "";
-    const getOg = (prop) => {
-      var _a2, _b;
-      const match = (_a2 = ogHtml.match(new RegExp(`<meta[^>]*property=["']${prop}["'][^>]*content=["']([^"']+)["']`, "i"))) != null ? _a2 : ogHtml.match(new RegExp(`<meta[^>]*content=["']([^"']+)["'][^>]*property=["']${prop}["']`, "i"));
-      return (_b = match == null ? void 0 : match[1]) != null ? _b : "";
-    };
-    const ogTitle = getOg("og:title");
-    const ogDescription = getOg("og:description");
-    embed = {
-      $type: "app.bsky.embed.external",
-      external: {
-        uri: questionUrl,
-        title: ogTitle || "AMA",
-        description: ogDescription || ""
+    const ogImageUrl = questionUrl.replace(/\/ama\//, "/api/og/");
+    const imgRes = await fetch(ogImageUrl).catch(() => null);
+    if (imgRes == null ? void 0 : imgRes.ok) {
+      const imgBuffer = await imgRes.arrayBuffer();
+      const uploadRes = await fetch("https://bsky.social/xrpc/com.atproto.repo.uploadBlob", {
+        method: "POST",
+        headers: {
+          "Content-Type": "image/png",
+          "Authorization": `Bearer ${accessJwt}`
+        },
+        body: imgBuffer
+      });
+      if (uploadRes.ok) {
+        const { blob } = await uploadRes.json();
+        embed = {
+          $type: "app.bsky.embed.images",
+          images: [{
+            alt: "AMA question card",
+            image: blob,
+            aspectRatio: { $type: "app.bsky.embed.defs#aspectRatio", width: 800, height: 418 }
+          }]
+        };
       }
-    };
+    }
   }
   const text = body.text;
   const encoder = new TextEncoder();
   const hashtagIndex = text.lastIndexOf("#ama");
   const hashtagByteStart = encoder.encode(text.slice(0, hashtagIndex)).length;
   const hashtagByteEnd = hashtagByteStart + encoder.encode("#ama").length;
-  const facets = [
-    {
-      index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
-      features: [{ $type: "app.bsky.richtext.facet#tag", tag: "ama" }]
-    }
-  ];
   const record = {
     $type: "app.bsky.feed.post",
     text,
     createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-    facets,
+    facets: [
+      {
+        index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
+        features: [{ $type: "app.bsky.richtext.facet#tag", tag: "ama" }]
+      }
+    ],
     ...embed ? { embed } : {}
   };
   const postRes = await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", {

@@ -66,7 +66,7 @@ async function deleteQuestion(q: Question) {
 
 function blueskyPostText(q: Question): string {
   const text = q.answer ? q.answer.trim() : q.question.trim()
-  return `${text} #ama`
+  return `${text}\n\nasktodd.netlify.app/ama\n\n#ama`
 }
 
 async function shareToBluesky(q: Question) {

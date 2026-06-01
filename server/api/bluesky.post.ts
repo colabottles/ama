@@ -28,54 +28,56 @@ export default defineEventHandler(async (event) => {
   const accessJwt = session.accessJwt
   const did = session.did
 
-  // 2. build link card embed from questionUrl
+  // 2. fetch and upload the card image as app.bsky.embed.images (like Daniel Roe's AMA)
   const questionUrl = body.questionUrl as string | undefined
   let embed: Record<string, unknown> | undefined
 
   if (questionUrl) {
-    // fetch OG data for the link card
-    const ogRes = await fetch(questionUrl).catch(() => null)
-    const ogHtml = ogRes ? await ogRes.text() : ''
+    const ogImageUrl = questionUrl.replace(/\/ama\//, '/api/og/')
+    const imgRes = await fetch(ogImageUrl).catch(() => null)
 
-    const getOg = (prop: string) => {
-      const match = ogHtml.match(new RegExp(`<meta[^>]*property=["']${prop}["'][^>]*content=["']([^"']+)["']`, 'i'))
-        ?? ogHtml.match(new RegExp(`<meta[^>]*content=["']([^"']+)["'][^>]*property=["']${prop}["']`, 'i'))
-      return match?.[1] ?? ''
-    }
+    if (imgRes?.ok) {
+      const imgBuffer = await imgRes.arrayBuffer()
+      const uploadRes = await fetch('https://bsky.social/xrpc/com.atproto.repo.uploadBlob', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'image/png',
+          'Authorization': `Bearer ${accessJwt}`,
+        },
+        body: imgBuffer,
+      })
 
-    const ogTitle = getOg('og:title')
-    const ogDescription = getOg('og:description')
-
-    embed = {
-      $type: 'app.bsky.embed.external',
-      external: {
-        uri: questionUrl,
-        title: ogTitle || 'AMA',
-        description: ogDescription || '',
-      },
+      if (uploadRes.ok) {
+        const { blob } = await uploadRes.json()
+        embed = {
+          $type: 'app.bsky.embed.images',
+          images: [{
+            alt: 'AMA question card',
+            image: blob,
+            aspectRatio: { $type: 'app.bsky.embed.defs#aspectRatio', width: 800, height: 418 },
+          }],
+        }
+      }
     }
   }
 
-  // 3. build facets for #ama hashtag
+  // 3. build #ama hashtag facet
   const text = body.text as string
   const encoder = new TextEncoder()
-
   const hashtagIndex = text.lastIndexOf('#ama')
   const hashtagByteStart = encoder.encode(text.slice(0, hashtagIndex)).length
   const hashtagByteEnd = hashtagByteStart + encoder.encode('#ama').length
-
-  const facets = [
-    {
-      index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
-      features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'ama' }],
-    },
-  ]
 
   const record: Record<string, unknown> = {
     $type: 'app.bsky.feed.post',
     text,
     createdAt: new Date().toISOString(),
-    facets,
+    facets: [
+      {
+        index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
+        features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'ama' }],
+      },
+    ],
     ...(embed ? { embed } : {}),
   }
 
