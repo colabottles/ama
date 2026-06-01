@@ -13,7 +13,9 @@ export default defineNuxtConfig({
       siteDisplayName: 'Todd Libby',
     }
   },
-
+  nitro: {
+    preset: 'netlify'
+  },
   app: {
     head: {
       title: 'Ask Me Anything Anonymously',

@@ -81,7 +81,7 @@ async function shareToBluesky(q: Question) {
       method: 'POST',
       body: {
         text: `${q.answer.trim()} #ama`,
-        questionUrl: `https://toddl.dev/ama/${q.id}`,
+        questionUrl: `https://asktodd.netlify.app/ama/${q.id}`,
       },
     })
     postError.value = ''

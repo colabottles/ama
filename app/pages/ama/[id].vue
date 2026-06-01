@@ -11,7 +11,7 @@ if (!question.value) {
   throw createError({ statusCode: 404, message: 'Question not found.' })
 }
 
-const siteUrl = 'https://toddl.dev'
+const siteUrl = 'https://asktodd.netlify.app'
 
 useHead({
   title: question.value.question,

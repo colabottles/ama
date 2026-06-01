@@ -1,13 +1,20 @@
 import { useRuntimeConfig } from '#imports'
 import { createClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+let client: SupabaseClient | null = null
 
 export const useAuth = () => {
   const config = useRuntimeConfig()
 
-  const supabase = createClient(
-    config.public.supabaseUrl as string,
-    config.public.supabaseAnonKey as string
-  )
+  if (!client) {
+    client = createClient(
+      config.public.supabaseUrl as string,
+      config.public.supabaseAnonKey as string
+    )
+  }
+
+  const supabase = client
 
   async function signIn(email: string, password: string) {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
