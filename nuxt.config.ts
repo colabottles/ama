@@ -15,10 +15,6 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'netlify',
-    output: {
-      dir: '.output',
-      publicDir: '.output/public',
-    }
   },
   app: {
     head: {
