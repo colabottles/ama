@@ -1,0 +1,25 @@
+{
+  "name": "ama",
+  "version": "1.0.0",
+  "description": "Ask me anything, anonymously",
+  "license": "ISC",
+  "author": "Todd Libby",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@supabase/supabase-js": "^2.106.2",
+    "html2canvas": "^1.4.1",
+    "nuxt": "^4.4.6",
+    "satori": "^0.26.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
