@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1de29-kfQjdPtEHPjLAAZRGLR9TrbJmWk\"",
-    "mtime": "2026-06-01T04:22:43.645Z",
-    "size": 122409,
+    "etag": "\"1de0a-AEcrICvfV4xMBr0Ut1gV4bIliq4\"",
+    "mtime": "2026-06-01T04:25:27.047Z",
+    "size": 122378,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"761a3-AGfIMM4YtrbFMzIPvjRRo/1QR8Y\"",
-    "mtime": "2026-06-01T04:22:43.645Z",
-    "size": 483747,
+    "etag": "\"760f4-AovubrSV9WNVZD6AiMpnkVUYPSQ\"",
+    "mtime": "2026-06-01T04:25:27.047Z",
+    "size": 483572,
     "path": "index.mjs.map"
   }
 };
@@ -3136,20 +3136,29 @@ const bluesky_post = defineEventHandler(async (event) => {
     };
   }
   const text = body.text;
-  const hashtagIndex = text.lastIndexOf("#ama");
   const encoder = new TextEncoder();
-  const byteStart = encoder.encode(text.slice(0, hashtagIndex)).length;
-  const byteEnd = byteStart + encoder.encode("#ama").length;
+  const hashtagIndex = text.lastIndexOf("#ama");
+  const hashtagByteStart = encoder.encode(text.slice(0, hashtagIndex)).length;
+  const hashtagByteEnd = hashtagByteStart + encoder.encode("#ama").length;
+  const urlIndex = text.lastIndexOf("https://");
+  const urlStr = text.slice(urlIndex);
+  const urlByteStart = encoder.encode(text.slice(0, urlIndex)).length;
+  const urlByteEnd = urlByteStart + encoder.encode(urlStr).length;
+  const facets = [
+    {
+      index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
+      features: [{ $type: "app.bsky.richtext.facet#tag", tag: "ama" }]
+    },
+    {
+      index: { byteStart: urlByteStart, byteEnd: urlByteEnd },
+      features: [{ $type: "app.bsky.richtext.facet#link", uri: urlStr }]
+    }
+  ];
   const record = {
     $type: "app.bsky.feed.post",
     text,
     createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-    facets: [
-      {
-        index: { byteStart, byteEnd },
-        features: [{ $type: "app.bsky.richtext.facet#tag", tag: "ama" }]
-      }
-    ],
+    facets,
     ...embed ? { embed } : {}
   };
   const postRes = await fetch("https://bsky.social/xrpc/com.atproto.repo.createRecord", {

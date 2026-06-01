@@ -78,23 +78,35 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // 3. build facets for #ama hashtag
+  // 3. build facets for #ama hashtag and URL link
   const text = body.text as string
-  const hashtagIndex = text.lastIndexOf('#ama')
   const encoder = new TextEncoder()
-  const byteStart = encoder.encode(text.slice(0, hashtagIndex)).length
-  const byteEnd = byteStart + encoder.encode('#ama').length
+
+  const hashtagIndex = text.lastIndexOf('#ama')
+  const hashtagByteStart = encoder.encode(text.slice(0, hashtagIndex)).length
+  const hashtagByteEnd = hashtagByteStart + encoder.encode('#ama').length
+
+  const urlIndex = text.lastIndexOf('https://')
+  const urlStr = text.slice(urlIndex)
+  const urlByteStart = encoder.encode(text.slice(0, urlIndex)).length
+  const urlByteEnd = urlByteStart + encoder.encode(urlStr).length
+
+  const facets = [
+    {
+      index: { byteStart: hashtagByteStart, byteEnd: hashtagByteEnd },
+      features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'ama' }],
+    },
+    {
+      index: { byteStart: urlByteStart, byteEnd: urlByteEnd },
+      features: [{ $type: 'app.bsky.richtext.facet#link', uri: urlStr }],
+    },
+  ]
 
   const record: Record<string, unknown> = {
     $type: 'app.bsky.feed.post',
     text,
     createdAt: new Date().toISOString(),
-    facets: [
-      {
-        index: { byteStart, byteEnd },
-        features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'ama' }],
-      },
-    ],
+    facets,
     ...(embed ? { embed } : {}),
   }
 
