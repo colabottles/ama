@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1dd5c-GWqdUmnYJq4JE2iTUuaMQEXJSz8\"",
-    "mtime": "2026-06-01T04:06:09.588Z",
-    "size": 122204,
+    "etag": "\"1de29-kfQjdPtEHPjLAAZRGLR9TrbJmWk\"",
+    "mtime": "2026-06-01T04:22:43.645Z",
+    "size": 122409,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"75e92-+gYOTjFT9Mlenex03k46qX2KfPY\"",
-    "mtime": "2026-06-01T04:06:09.588Z",
-    "size": 482962,
+    "etag": "\"761a3-AGfIMM4YtrbFMzIPvjRRo/1QR8Y\"",
+    "mtime": "2026-06-01T04:22:43.645Z",
+    "size": 483747,
     "path": "index.mjs.map"
   }
 };
@@ -3189,7 +3189,10 @@ const _id__get$2 = defineEventHandler(async (event) => {
   if (error || !question) {
     throw createError({ statusCode: 404, message: "Question not found." });
   }
-  const fontData = await useStorage("assets/server").getItemRaw("fonts/inter.ttf");
+  const storage = useStorage("assets/server");
+  const raw = await storage.getItem("fonts/SofiaSansSemiCondensed-Medium.ttf");
+  if (!raw) throw createError({ statusCode: 500, message: "Font not found." });
+  const fontData = Buffer.from(raw, "base64");
   const svg = await satori(
     {
       type: "div",
@@ -3203,7 +3206,7 @@ const _id__get$2 = defineEventHandler(async (event) => {
           padding: "40px",
           display: "flex",
           flexDirection: "column",
-          fontFamily: "monospace",
+          fontFamily: "Sofia",
           color: "#fafafa",
           boxSizing: "border-box"
         },
@@ -3332,7 +3335,7 @@ const _id__get$2 = defineEventHandler(async (event) => {
       height: 418,
       fonts: [
         {
-          name: "monospace",
+          name: "Sofia",
           data: fontData,
           weight: 400,
           style: "normal"

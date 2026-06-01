@@ -15,8 +15,11 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, message: 'Question not found.' })
   }
 
-  // read font from server/assets - Nitro bundles this into the function
-  const fontData = await useStorage('assets/server').getItemRaw('fonts/inter.ttf')
+  // useStorage returns binary assets as base64 strings in Nitro
+  const storage = useStorage('assets/server')
+  const raw = await storage.getItem('fonts/SofiaSansSemiCondensed-Medium.ttf')
+  if (!raw) throw createError({ statusCode: 500, message: 'Font not found.' })
+  const fontData = Buffer.from(raw as string, 'base64')
 
   const svg = await satori(
     {
@@ -31,7 +34,7 @@ export default defineEventHandler(async (event) => {
           padding: '40px',
           display: 'flex',
           flexDirection: 'column',
-          fontFamily: 'monospace',
+          fontFamily: 'Sofia',
           color: '#fafafa',
           boxSizing: 'border-box',
         },
@@ -160,7 +163,7 @@ export default defineEventHandler(async (event) => {
       height: 418,
       fonts: [
         {
-          name: 'monospace',
+          name: 'Sofia',
           data: fontData,
           weight: 400,
           style: 'normal',
