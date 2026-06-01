@@ -2155,16 +2155,16 @@ _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 const assets = {
   "/index.mjs": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"1de0a-AEcrICvfV4xMBr0Ut1gV4bIliq4\"",
-    "mtime": "2026-06-01T04:25:27.047Z",
-    "size": 122378,
+    "etag": "\"1dfbf-pVjgZHFKBvRfP8fH+dFpd+Gau7w\"",
+    "mtime": "2026-06-01T04:29:53.982Z",
+    "size": 122815,
     "path": "index.mjs"
   },
   "/index.mjs.map": {
     "type": "application/json",
-    "etag": "\"760f4-AovubrSV9WNVZD6AiMpnkVUYPSQ\"",
-    "mtime": "2026-06-01T04:25:27.047Z",
-    "size": 483572,
+    "etag": "\"767e4-1mjVV0WxAU+rsT1z4D+lxncSCzk\"",
+    "mtime": "2026-06-01T04:29:53.982Z",
+    "size": 485348,
     "path": "index.mjs.map"
   }
 };
@@ -3094,7 +3094,9 @@ const bluesky_post = defineEventHandler(async (event) => {
   const session = await sessionRes.json();
   const accessJwt = session.accessJwt;
   const did = session.did;
-  const questionUrl = body.questionUrl;
+  const text = body.text;
+  const urlMatch = text.match(/https:\/\/\S+/);
+  const questionUrl = urlMatch ? urlMatch[0] : void 0;
   let embed;
   if (questionUrl) {
     const ogRes = await fetch(questionUrl).catch(() => null);
@@ -3135,7 +3137,6 @@ const bluesky_post = defineEventHandler(async (event) => {
       }
     };
   }
-  const text = body.text;
   const encoder = new TextEncoder();
   const hashtagIndex = text.lastIndexOf("#ama");
   const hashtagByteStart = encoder.encode(text.slice(0, hashtagIndex)).length;

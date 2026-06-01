@@ -28,8 +28,10 @@ export default defineEventHandler(async (event) => {
   const accessJwt = session.accessJwt
   const did = session.did
 
-  // 2. resolve the question URL into a link card (external embed)
-  const questionUrl = body.questionUrl as string | undefined
+  // 2. extract question URL from post text and build link card embed
+  const text = body.text as string
+  const urlMatch = text.match(/https:\/\/\S+/)
+  const questionUrl = urlMatch ? urlMatch[0] : undefined
   let embed: Record<string, unknown> | undefined
 
   if (questionUrl) {
@@ -79,7 +81,6 @@ export default defineEventHandler(async (event) => {
   }
 
   // 3. build facets for #ama hashtag and URL link
-  const text = body.text as string
   const encoder = new TextEncoder()
 
   const hashtagIndex = text.lastIndexOf('#ama')
